@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Oss
- * 
+ *
  * @property int $id
  * @property string $url
  * @property Carbon $create_time
@@ -27,8 +27,19 @@ class Oss extends Model
 
 	protected $casts = [
 		'document_type' => 'int',
-		'type' => 'int'
+		'type' => 'string'
 	];
+
+    protected $appends = [
+        "type_name"
+    ];
+
+    public function getTypeNameAttribute()
+    {
+        $type = $this->type;
+        $types = ["默认","图片", "文章", "活动"];
+        return isset($types[$type]) ? $types[$type] : "";
+    }
 
 	protected $dates = [
 		'create_time'

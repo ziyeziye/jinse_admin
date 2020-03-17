@@ -21,4 +21,22 @@ class ArticleService extends BaseService
         return self::$_object;
     }
 
+    public static function table($param = [], int $page = null, int $size = 15)
+    {
+        $query = self::$model->query();
+        if (isset($param['name']) && !empty($param['name'])) {
+            $query = $query->where("name", "like", "%{$param['name']}%");
+        }
+        $query->with("author");
+        $query->with("category");
+
+        return self::ModelSearch($query, $param, $page, $size);
+    }
+
+    public static function info($id)
+    {
+        $info =self::$model->with("author")->find($id);
+        return $info;
+    }
+
 }

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Category
- * 
+ *
  * @property int $id
  * @property string $name
  * @property int $pid
@@ -36,4 +36,14 @@ class Category extends Model
 		'sort',
 		'root_id'
 	];
+
+    protected $appends = [
+        "parent_name",
+    ];
+
+    public function getParentNameAttribute()
+    {
+        $parentName = self::where("id", $this->pid)->value("name");
+        return $parentName ?: "一级分类";
+    }
 }

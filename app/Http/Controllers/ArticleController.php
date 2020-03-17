@@ -35,11 +35,12 @@ class ArticleController extends BaseController
         $check = $this->_valid([
             'name' => 'required',
             'img' => 'required',
+            'user_id' => 'required',
         ], [
-            'name.required' => '请输入名称',
-            'img.required' => '请上传图标',
+            'name.required' => '请输入文章标题',
+            'img.required' => '请上传封面',
+            'user_id.required' => '请选择作者',
         ]);
-
         if (true !== $check) {
             return $this->errorWithMsg($check, 405);
         }
@@ -52,7 +53,12 @@ class ArticleController extends BaseController
         $data = [
             "name" => $request->input("name"),
             "img" => $request->input("img"),
-            "href" => $request->input("href"),
+            "type" => $request->input("type", 1),
+            "content" => $request->input("content", ''),
+            "tags" => $request->input("tags", []),
+            "video" => $request->input("video", ''),
+            "category_id" => $request->input("category_id", 0),
+            "user_id" => $request->input("user_id", 0),
         ];
 
         $result = $this->service()->save($data);
@@ -66,7 +72,12 @@ class ArticleController extends BaseController
         $data = [
             "name" => $request->input("name"),
             "img" => $request->input("img"),
-            "href" => $request->input("href"),
+            "type" => $request->input("type", 1),
+            "content" => $request->input("content", ''),
+            "tags" => $request->input("tags", []),
+            "video" => $request->input("video", ''),
+            "category_id" => $request->input("category_id", 0),
+            "user_id" => $request->input("user_id", 0),
         ];
 
         $result = $this->service()->update($data, $id);

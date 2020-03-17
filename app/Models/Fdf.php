@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Fdf
- * 
+ *
  * @property int $id
  * @property string $name
  * @property string $size
@@ -31,10 +31,21 @@ class Fdf extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'type' => 'int',
+		'type' => 'string',
 		'document_type' => 'int',
 		'create_id' => 'int'
 	];
+
+    protected $appends = [
+        "type_name"
+    ];
+
+    public function getTypeNameAttribute()
+    {
+        $type = $this->type;
+        $types = ["默认","图片", "文章", "活动"];
+        return isset($types[$type]) ? $types[$type] : "";
+    }
 
 	protected $dates = [
 		'create_time'

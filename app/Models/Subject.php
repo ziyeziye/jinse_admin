@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Subject
- * 
+ *
  * @property int $id
  * @property int $user_id
  * @property string $name
@@ -36,10 +36,19 @@ class Subject extends Model
 		'update_time'
 	];
 
+    protected $appends = [
+        "img_src",
+    ];
+
+    public function getImgSrcAttribute()
+    {
+        return $this->img ? env('APP_URL') . $this->img : '';
+    }
+
 	protected $fillable = [
 		'user_id',
 		'name',
-		'cover',
+		'img',
 		'content',
 		'create_time',
 		'update_time'

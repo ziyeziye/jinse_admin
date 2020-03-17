@@ -1,15 +1,32 @@
-<template>
+ <template>
   <el-dialog
     :close-on-click-modal="false"
     :title="!dataForm.id ? '新增' : '修改'"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" @keyup.enter.native="dataFormSubmit()" label-width="80px"
              ref="dataForm">
-      <el-form-item label="名称" prop="name">
-        <el-input placeholder="名称" v-model="dataForm.name"></el-input>
+
+      <el-row :gutter="10">
+        <el-col :span="14">
+          <el-form-item label="名称" prop="name">
+            <el-input placeholder="名称" v-model="dataForm.name"></el-input>
+          </el-form-item>        </el-col>
+        <el-col :span="8">
+          <el-form-item label="类型">
+            <el-select placeholder="请选择类型" v-model="dataForm.type">
+              <el-option label="图片" value="1"></el-option>
+              <el-option label="文章" value="2"></el-option>
+              <el-option label="活动" value="3"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <el-form-item label="链接" prop="href">
+        <el-input placeholder="链接" v-model="dataForm.href"></el-input>
       </el-form-item>
 
-      <el-form-item label="图标" prop="img">
+      <el-form-item label="图片" prop="img">
         <el-upload
           :action="uploadUrl"
           :before-upload="beforeUploadHandle"
@@ -20,10 +37,6 @@
           <img :src="dataForm.imgsrc" class="avatar" v-if="dataForm.imgsrc">
           <i class="el-icon-plus avatar-uploader-icon" v-else></i>
         </el-upload>
-      </el-form-item>
-
-      <el-form-item label="链接" prop="href">
-        <el-input placeholder="链接" v-model="dataForm.href"></el-input>
       </el-form-item>
 
     </el-form>
@@ -50,22 +63,22 @@
   .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 80px;
-    height: 80px;
-    line-height: 80px;
+    width: 250px;
+    height: 140px;
+    line-height: 140px;
     text-align: center;
   }
 
   .avatar {
-    width: 80px;
-    height: 80px;
+    width: 250px;
+    height: 140px;
     display: block;
   }
 </style>
 
 <script>
   export default {
-    data () {
+    data() {
       return {
         visible: false,
         uploadUrl: '',
@@ -74,21 +87,22 @@
           id: 0,
           name: '',
           img: '',
+          type: '1',
           imgsrc: '',
           href: ''
         },
         dataRule: {
           name: [
-            {required: true, message: '名称不能为空', trigger: 'blur'}
+            {required: true, message: '标题不能为空', trigger: 'blur'}
           ],
           img: [
-            {required: true, message: '图标不能为空', trigger: 'blur'}
+            {required: true, message: '图片不能为空', trigger: 'blur'}
           ]
         }
       }
     },
     methods: {
-      init (id) {
+      init(id) {
         this.uploadUrl = this.$http.adornUrl('/web/upload')
         this.dataForm.imgsrc = ''
         this.headers = {
@@ -111,6 +125,7 @@
               if (data && data.code === 200) {
                 this.dataForm.name = data.result.name
                 this.dataForm.href = data.result.href
+                this.dataForm.type = data.result.type
                 this.dataForm.imgsrc = data.result.img_src
                 this.dataForm.img = data.result.img
               }
@@ -119,7 +134,7 @@
         })
       },
       // 表单提交
-      dataFormSubmit () {
+      dataFormSubmit() {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
@@ -128,6 +143,7 @@
               data: this.$http.adornData({
                 'id': this.dataForm.id || null,
                 'name': this.dataForm.name,
+                'type': this.dataForm.type,
                 'href': this.dataForm.href || null,
                 'img': this.dataForm.img
               })
@@ -149,7 +165,7 @@
           }
         })
       },
-      successUploadHandle (response, file) {
+      successUploadHandle(response, file) {
         if (response && response.code === 200) {
           this.dataForm.imgsrc = response.result.src
           this.dataForm.img = response.result.path
@@ -157,7 +173,7 @@
           this.$message.error(response.msg)
         }
       },
-      beforeUploadHandle (file) {
+      beforeUploadHandle(file) {
         if (file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
           this.$message.error('只支持jpg、png、gif格式的图片！')
           return false

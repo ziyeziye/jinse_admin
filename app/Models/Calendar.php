@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Calendar
- * 
+ *
  * @property int $id
  * @property int $r_id
  * @property bool $rate
@@ -35,8 +35,19 @@ class Calendar extends Model
 		'good' => 'int',
 		'bad' => 'int',
 		'coin_id' => 'int',
-		'type' => 'int'
+		'type' => 'string'
 	];
+
+    protected $appends = [
+        "type_name"
+    ];
+
+    public function getTypeNameAttribute()
+    {
+        $type = $this->type;
+        $types = ["默认","图片", "文章", "活动"];
+        return isset($types[$type]) ? $types[$type] : "";
+    }
 
 	protected $dates = [
 		'create_time',

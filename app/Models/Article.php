@@ -33,39 +33,75 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Article extends Model
 {
-	protected $table = 'articles';
-	public $timestamps = false;
+    protected $table = 'articles';
+    public $timestamps = false;
 
-	protected $casts = [
-		'user_id' => 'int',
-		'number' => 'int',
-		'coin_id' => 'int',
-		'good' => 'int',
-		'bad' => 'int',
-		'category_id' => 'int',
-		'zan' => 'int'
-	];
+    protected $casts = [
+        'user_id' => 'int',
+        'number' => 'int',
+        'coin_id' => 'int',
+        'good' => 'int',
+        'bad' => 'int',
+        'category_id' => 'int',
+        'zan' => 'int',
+        'tags' => 'array',
+        'type' => 'string',
+    ];
 
-	protected $dates = [
-		'create_time',
-		'update_time'
-	];
+    protected $dates = [
+        'create_time',
+        'update_time'
+    ];
 
-	protected $fillable = [
-		'user_id',
-		'name',
-		'cover',
-		'content',
-		'number',
-		'create_time',
-		'update_time',
-		'coin_id',
-		'tags',
-		'good',
-		'bad',
-		'category_id',
-		'video',
-		'type',
-		'zan'
-	];
+    protected $appends = [
+        "img_src",
+        "type_name",
+        "video_src"
+    ];
+
+    public function getImgSrcAttribute()
+    {
+        return $this->img ? env('APP_URL') . $this->img : '';
+    }
+
+    public function getVideoSrcAttribute()
+    {
+        return $this->video ? env('APP_URL') . $this->video : '';
+    }
+
+    public function getTypeNameAttribute()
+    {
+        $type = $this->type;
+        $types = ["默认", "文章", "快讯", "视频"];
+        return isset($types[$type]) ? $types[$type] : "";
+    }
+
+    protected $fillable = [
+        'user_id',
+        'name',
+        'img',
+        'content',
+        'number',
+        'create_time',
+        'update_time',
+        'coin_id',
+        'tags',
+        'good',
+        'bad',
+        'category_id',
+        'video',
+        'type',
+        'zan'
+    ];
+
+    public function author()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category', 'category_id');
+    }
+
 }

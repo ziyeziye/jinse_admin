@@ -2,13 +2,13 @@
   <div>
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input clearable placeholder="问题" v-model="dataForm.userName"></el-input>
+        <el-input clearable placeholder="标签" v-model="dataForm.name"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="addOrUpdateHandle()" type="primary" v-if="isAuth('web:faq:save')">新增</el-button>
+        <el-button @click="addOrUpdateHandle()" type="primary" v-if="isAuth('web:tag:save')">新增</el-button>
         <el-button :disabled="dataListSelections.length <= 0" @click="deleteHandle()" type="danger"
-                   v-if="isAuth('web:faq:delete')">批量删除
+                   v-if="isAuth('web:tag:delete')">批量删除
         </el-button>
       </el-form-item>
     </el-form>
@@ -18,12 +18,14 @@
       border
       style="width: 100%;"
       v-loading="dataListLoading">
+
       <el-table-column
         align="center"
         header-align="center"
         type="selection"
-        width="50">
+        width="28">
       </el-table-column>
+
       <el-table-column
         align="center"
         header-align="center"
@@ -33,37 +35,36 @@
       </el-table-column>
 
       <el-table-column
+        align="center"
         header-align="center"
-        label="问题"
+        label="标签"
         prop="name">
       </el-table-column>
 
       <el-table-column
-        :show-overflow-tooltip="true"
+        align="center"
         header-align="center"
-        label="内容"
-        prop="content">
+        label="权重"
+        prop="weight">
       </el-table-column>
 
       <el-table-column
         align="center"
         header-align="center"
-        label="创建时间"
-        prop="create_time"
-        width="150">
+        label="点击数"
+        prop="number">
       </el-table-column>
 
       <el-table-column
         align="center"
-        fixed="right"
         header-align="center"
         label="操作"
         width="150">
         <template slot-scope="scope">
-          <el-button @click="addOrUpdateHandle(scope.row.id)" size="small" type="text" v-if="isAuth('web:faq:update')">
+          <el-button @click="addOrUpdateHandle(scope.row.id)" size="small" type="text" v-if="isAuth('web:tag:update')">
             修改
           </el-button>
-          <el-button @click="deleteHandle(scope.row.id)" size="small" type="text" v-if="isAuth('web:faq:delete')">删除
+          <el-button @click="deleteHandle(scope.row.id)" size="small" type="text" v-if="isAuth('web:tag:delete')">删除
           </el-button>
         </template>
       </el-table-column>
@@ -71,7 +72,7 @@
     <el-pagination
       :current-page="pageIndex"
       :page-size="pageSize"
-      :page-sizes="[10, 20, 50, 100]"
+      :page-sizes="[10, 15, 20, 50]"
       :total="totalPage"
       @current-change="currentChangeHandle"
       @size-change="sizeChangeHandle"
@@ -83,17 +84,17 @@
 </template>
 
 <script>
-  import AddOrUpdate from './faq-add-or-update'
+  import AddOrUpdate from './tag-add-or-update'
 
   export default {
-    data () {
+    data() {
       return {
         dataForm: {
-          userName: ''
+          name: ''
         },
         dataList: [],
         pageIndex: 1,
-        pageSize: 10,
+        pageSize: 15,
         totalPage: 0,
         dataListLoading: false,
         dataListSelections: [],
@@ -103,20 +104,20 @@
     components: {
       AddOrUpdate
     },
-    activated () {
+    activated() {
       this.getDataList()
     },
     methods: {
       // 获取数据列表
-      getDataList () {
+      getDataList() {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/api/admin/faqs'),
+          url: this.$http.adornUrl('/api/admin/tags'),
           method: 'get',
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
-            'name': this.dataForm.userName || null
+            'content': this.dataForm.name || null
           })
         }).then(({data}) => {
           if (data && data.code === 200) {
@@ -130,29 +131,29 @@
         })
       },
       // 每页数
-      sizeChangeHandle (val) {
+      sizeChangeHandle(val) {
         this.pageSize = val
         this.pageIndex = 1
         this.getDataList()
       },
       // 当前页
-      currentChangeHandle (val) {
+      currentChangeHandle(val) {
         this.pageIndex = val
         this.getDataList()
       },
       // 多选
-      selectionChangeHandle (val) {
+      selectionChangeHandle(val) {
         this.dataListSelections = val
       },
       // 新增 / 修改
-      addOrUpdateHandle (id) {
+      addOrUpdateHandle(id) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
         })
       },
       // 删除
-      deleteHandle (id) {
+      deleteHandle(id) {
         var ids = id ? [id] : this.dataListSelections.map(item => {
           return item.id
         })
@@ -162,7 +163,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/api/admin/faqs'),
+            url: this.$http.adornUrl('/api/admin/tags'),
             method: 'delete',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {

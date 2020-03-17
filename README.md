@@ -7,12 +7,17 @@
 来还原数据库备份  
 `#后期会补齐laravel数据库迁移文件`
 
-2.启动项目  
-先初始化项目  
-`composer install`  
-然后到js目录  
-`npm install` 
- 
+2.初始化项目  
+```
+创建上传目录软连接
+php artisan storage:link
+安装composer
+composer install
+然后到js目录
+npm install
+```  
+
+3.启动项目   
 启动php服务  
 `php artisan serve`  
 启动前端程序(切换到js目录)  
@@ -23,7 +28,7 @@ baseUrl配置为后端接口域名(端口)
 npm run dev
 ```
 
-3.编译前端代码
+4.编译前端代码
 ```
 npm run build
 修改js/dist/config/index.js

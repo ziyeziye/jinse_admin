@@ -49,6 +49,45 @@ Route::group(['prefix'=>'/api/admin'], function () {
 
         //=======================WEB业务设置=======================================
         //-----------------------jinse start---------------------------------------
+        Route::get('/banners', "BannerController@table")->name('banner.list');
+        Route::get('/banners/{id}', "BannerController@info")->name('banner.info');
+        Route::post('/banners', "BannerController@save")->name('banner.save@新增banner');
+        Route::put('/banners/{id}', "BannerController@update")->name('banner.update@修改banner');
+        Route::delete('/banners', "BannerController@delete")->name('banner.delete@删除banner');
+
+        Route::get('/users', "UserController@table")->name('user.list');
+        Route::get('/users/{id}', "UserController@info")->name('user.info');
+        Route::post('/users', "UserController@save")->name('user.save@新增会员');
+        Route::put('/users/{id}', "UserController@update")->name('user.update@修改会员');
+        Route::delete('/users', "UserController@delete")->name('user.delete@删除会员');
+
+        Route::get('/tags', "TagController@table")->name('tag.list');
+        Route::get('/tags/{id}', "TagController@info")->name('tag.info');
+        Route::post('/tags', "TagController@save")->name('tag.save@新增标签');
+        Route::put('/tags/{id}', "TagController@update")->name('tag.update@修改标签');
+        Route::delete('/tags', "TagController@delete")->name('tag.delete@删除标签');
+
+        Route::get('/hot_words', "HotWordController@table")->name('hot_word.list');
+        Route::get('/hot_words/{id}', "HotWordController@info")->name('hot_word.info');
+        Route::post('/hot_words', "HotWordController@save")->name('hot_word.save@新增热词');
+        Route::put('/hot_words/{id}', "HotWordController@update")->name('hot_word.update@修改热词');
+        Route::delete('/hot_words', "HotWordController@delete")->name('hot_word.delete@删除热词');
+
+        Route::get('/articles', "ArticleController@table")->name('article.list');
+        Route::get('/articles/{id}', "ArticleController@info")->name('article.info');
+        Route::post('/articles', "ArticleController@save")->name('article.save@新增文章');
+        Route::put('/articles/{id}', "ArticleController@update")->name('article.update@修改文章');
+        Route::delete('/articles', "ArticleController@delete")->name('article.delete@删除文章');
+
+        Route::get('/categories', "CategoryController@table")->name('category.list');
+        Route::get('/categories/group', "CategoryController@group")->name('category.group');
+        Route::get('/categories/{id}', "CategoryController@info")->name('category.info');
+        Route::post('/categories', "CategoryController@save")->name('category.save@新增分类');
+        Route::put('/categories/{id}', "CategoryController@update")->name('category.update@修改分类');
+        Route::delete('/categories', "CategoryController@delete")->name('category.delete@删除分类');
+
+
+
 
 
 

@@ -2,13 +2,23 @@
   <div>
     <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()">
       <el-form-item>
-        <el-input clearable placeholder="标题" v-model="dataForm.name"></el-input>
+        <el-input clearable placeholder="用户名" v-model="dataForm.name"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-input clearable placeholder="手机号" v-model="dataForm.phone"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-select placeholder="请选择状态" v-model="dataForm.status">
+          <el-option label="全部" value="0"></el-option>
+          <el-option label="正常" value="1"></el-option>
+          <el-option label="禁用" value="2"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button @click="addOrUpdateHandle()" type="primary" v-if="isAuth('web:banner:save')">新增</el-button>
+        <el-button @click="addOrUpdateHandle()" type="primary" v-if="isAuth('web:user:save')">新增</el-button>
         <el-button :disabled="dataListSelections.length <= 0" @click="deleteHandle()" type="danger"
-                   v-if="isAuth('web:banner:delete')">批量删除
+                   v-if="isAuth('web:user:delete')">批量删除
         </el-button>
       </el-form-item>
     </el-form>
@@ -21,30 +31,41 @@
       <el-table-column align="center" header-align="center" label="ID" prop="id" width="80">
       </el-table-column>
 
-      <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="标题" prop="name"
-                       width="250">
+      <el-table-column :show-overflow-tooltip="true" align="center" header-align="center" label="用户名" prop="username"
+                       width="100">
       </el-table-column>
 
-      <el-table-column align="center" header-align="center" label="类型" prop="type_name" width="50">
+      <el-table-column align="center" header-align="center" label="昵称" prop="nickname"
+                       width="100">
       </el-table-column>
 
-      <el-table-column align="center" header-align="center" label="图片" prop="img_src" width="200">
-        <!-- 图片的显示 -->
-        <template slot-scope="scope">
-          <img :src="scope.row.img_src" width="170"/>
-        </template>
+      <el-table-column align="center" header-align="center" label="手机号" prop="phone">
       </el-table-column>
 
-      <el-table-column align="center" header-align="center" label="链接" prop="href">
+      <el-table-column align="center" header-align="center" label="邀请人" prop="invite_user.username"
+                       width="100">
+      </el-table-column>
+
+      <el-table-column align="center" header-align="center" label="实名认证" prop="verify_name" width="100">
+      </el-table-column>
+
+      <el-table-column align="center" header-align="center" label="状态" prop="status_name" width="50">
+      </el-table-column>
+
+      <el-table-column align="center" header-align="center" label="ip" prop="reg_ip" width="150">
+      </el-table-column>
+
+
+      <el-table-column align="center" header-align="center" label="创建时间" prop="created_at" width="150">
       </el-table-column>
 
       <el-table-column align="center" header-align="center" label="操作" width="150">
         <template slot-scope="scope">
           <el-button @click="addOrUpdateHandle(scope.row.id)" size="small" type="text"
-                     v-if="isAuth('web:banner:update')">
+                     v-if="isAuth('web:user:update')">
             修改
           </el-button>
-          <el-button @click="deleteHandle(scope.row.id)" size="small" type="text" v-if="isAuth('web:banner:delete')">删除
+          <el-button @click="deleteHandle(scope.row.id)" size="small" type="text" v-if="isAuth('web:user:delete')">删除
           </el-button>
         </template>
       </el-table-column>
@@ -64,13 +85,15 @@
 </template>
 
 <script>
-  import AddOrUpdate from './banner-add-or-update'
+  import AddOrUpdate from './user-add-or-update'
 
   export default {
     data() {
       return {
         dataForm: {
-          name: ''
+          name: '',
+          phone: '',
+          status: '0',
         },
         dataList: [],
         pageIndex: 1,
@@ -92,12 +115,14 @@
       getDataList() {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/api/admin/banners'),
+          url: this.$http.adornUrl('/api/admin/users'),
           method: 'get',
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
-            'name': this.dataForm.name || null
+            'username': this.dataForm.name || null,
+            'phone': this.dataForm.phone || null,
+            'status': this.dataForm.status || '0',
           })
         }).then(({data}) => {
           if (data && data.code === 200) {
@@ -143,7 +168,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/api/admin/banners'),
+            url: this.$http.adornUrl('/api/admin/users'),
             method: 'delete',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {

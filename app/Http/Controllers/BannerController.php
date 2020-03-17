@@ -36,8 +36,8 @@ class BannerController extends BaseController
             'name' => 'required',
             'img' => 'required',
         ], [
-            'name.required' => '请输入名称',
-            'img.required' => '请上传图标',
+            'name.required' => '请输入标题',
+            'img.required' => '请上传图片',
         ]);
 
         if (true !== $check) {
@@ -53,6 +53,7 @@ class BannerController extends BaseController
             "name" => $request->input("name"),
             "img" => $request->input("img"),
             "href" => $request->input("href"),
+            "type" => $request->input("type"),
         ];
 
         $result = $this->service()->save($data);
@@ -67,6 +68,7 @@ class BannerController extends BaseController
             "name" => $request->input("name"),
             "img" => $request->input("img"),
             "href" => $request->input("href"),
+            "type" => $request->input("type"),
         ];
 
         $result = $this->service()->update($data, $id);

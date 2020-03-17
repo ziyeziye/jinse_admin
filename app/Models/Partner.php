@@ -19,6 +19,6 @@ class Partner extends BaseModel
 
     public function getImgSrcAttribute()
     {
-        return env('APP_URL') . $this->img;
+        return $this->img ? env('APP_URL') . $this->img : '';
     }
 }

@@ -34,10 +34,8 @@ class TagController extends BaseController
         //验证参数
         $check = $this->_valid([
             'name' => 'required',
-            'img' => 'required',
         ], [
             'name.required' => '请输入名称',
-            'img.required' => '请上传图标',
         ]);
 
         if (true !== $check) {
@@ -51,8 +49,8 @@ class TagController extends BaseController
         $this->valid();
         $data = [
             "name" => $request->input("name"),
-            "img" => $request->input("img"),
-            "href" => $request->input("href"),
+            "number" => $request->input("number"),
+            "weight" => $request->input("weight"),
         ];
 
         $result = $this->service()->save($data);
@@ -65,8 +63,8 @@ class TagController extends BaseController
         $this->valid();
         $data = [
             "name" => $request->input("name"),
-            "img" => $request->input("img"),
-            "href" => $request->input("href"),
+            "number" => $request->input("number"),
+            "weight" => $request->input("weight"),
         ];
 
         $result = $this->service()->update($data, $id);

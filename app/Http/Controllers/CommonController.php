@@ -47,7 +47,12 @@ class CommonController extends BaseController
     public function upload(Request $request, UploadsManager $manager)
     {
         $file = $request->file('file');
-        $path = $manager->uploadImg($file);
+        $type = $request->input('type', 'img');
+        if ($type == 'video') {
+            $path = $manager->upload($file, ['mp4', 'ogg', 'webm']);
+        } else {
+            $path = $manager->uploadImg($file);
+        }
 
         if ($path) {
             return $this->successWithResult(["path" => $path, "src" => env('APP_URL') . $path]);

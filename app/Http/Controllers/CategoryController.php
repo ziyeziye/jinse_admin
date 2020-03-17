@@ -19,6 +19,7 @@ class CategoryController extends BaseController
         //获取数据
         $page = $request->exists("pageNum") ? get_page() : [null];
         $where = request()->input();
+        $where['order_by'] = ["order" => "sort", "desc" => "asc"];
         $result = $this->service()->table($where, ...$page);
         return $this->successWithResult($result);
     }
@@ -34,10 +35,12 @@ class CategoryController extends BaseController
         //验证参数
         $check = $this->_valid([
             'name' => 'required',
-            'img' => 'required',
+            'pid' => 'required',
+            'root_id' => 'required',
         ], [
             'name.required' => '请输入名称',
-            'img.required' => '请上传图标',
+            'pid.required' => '请选择上级分类',
+            'root_id.required' => '请选择上级分类',
         ]);
 
         if (true !== $check) {
@@ -51,8 +54,9 @@ class CategoryController extends BaseController
         $this->valid();
         $data = [
             "name" => $request->input("name"),
-            "img" => $request->input("img"),
-            "href" => $request->input("href"),
+            "sort" => $request->input("sort", 999),
+            "pid" => $request->input("pid", 0),
+            "root_id" => $request->input("root_id", 0),
         ];
 
         $result = $this->service()->save($data);
@@ -65,8 +69,9 @@ class CategoryController extends BaseController
         $this->valid();
         $data = [
             "name" => $request->input("name"),
-            "img" => $request->input("img"),
-            "href" => $request->input("href"),
+            "sort" => $request->input("sort", 999),
+            "pid" => $request->input("pid", 0),
+            "root_id" => $request->input("root_id", 0),
         ];
 
         $result = $this->service()->update($data, $id);
@@ -86,4 +91,21 @@ class CategoryController extends BaseController
         return $this->successWithResult($result);
     }
 
+    public function group()
+    {
+        $where['order_by'] = ["order" => "sort", "desc" => "asc"];
+        $result = $this->service()->table($where);
+        if ($result) {
+            $result = $result->toArray();
+            array_push($result, [
+                "id" => 0,
+                "name" => "一级分类",
+                "open" => true,
+                "pid" => -1,
+                "root_id" => 0
+            ]);
+        }
+
+        return $this->successWithResult($result);
+    }
 }

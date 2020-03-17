@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Feedback
- * 
+ *
  * @property int $id
  * @property int $user_id
  * @property int $type
@@ -30,8 +30,19 @@ class Feedback extends Model
 
 	protected $casts = [
 		'user_id' => 'int',
-		'type' => 'int'
+		'type' => 'string'
 	];
+
+    protected $appends = [
+        "type_name"
+    ];
+
+    public function getTypeNameAttribute()
+    {
+        $type = $this->type;
+        $types = ["默认","图片", "文章", "活动"];
+        return isset($types[$type]) ? $types[$type] : "";
+    }
 
 	protected $dates = [
 		'create_time',
