@@ -53,4 +53,9 @@ class Subject extends Model
 		'create_time',
 		'update_time'
 	];
+
+    public function author()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id');
+    }
 }

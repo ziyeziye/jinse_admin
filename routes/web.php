@@ -86,7 +86,14 @@ Route::group(['prefix'=>'/api/admin'], function () {
         Route::put('/categories/{id}', "CategoryController@update")->name('category.update@修改分类');
         Route::delete('/categories', "CategoryController@delete")->name('category.delete@删除分类');
 
-
+        Route::get('/subjects', "SubjectController@table")->name('subject.list');
+        Route::get('/subjects/{id}/articles', "SubjectController@articles")->name('subject.articles');
+        Route::get('/subjects/{id}', "SubjectController@info")->name('subject.info');
+        Route::post('/subjects/{id}/articles', "SubjectController@add_article")->name('subject.add_article@挂载专题文章');
+        Route::post('/subjects', "SubjectController@save")->name('subject.save@新增专题');
+        Route::put('/subjects/{id}', "SubjectController@update")->name('subject.update@修改专题');
+        Route::delete('/subjects', "SubjectController@delete")->name('subject.delete@删除专题');
+        Route::delete('/subjects/{id}/articles', "SubjectController@del_article")->name('subject.add_article@删除专题文章');
 
 
 
