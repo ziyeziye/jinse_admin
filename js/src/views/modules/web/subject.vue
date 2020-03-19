@@ -124,7 +124,12 @@
       AddArticle
     },
     activated() {
-      this.getDataList()
+      if (this.$route.query.id !== undefined) {
+        this.subjectId = this.$route.query.id
+      } else {
+        this.subjectId = 0
+        this.getDataList()
+      }
     },
     watch: {
       subjectId: function () {
@@ -257,11 +262,6 @@
         this.subjectId = 0
         this.$router.push({query: {}});
       },
-    },
-    created() {
-      if (this.$route.query.id !== undefined) {
-        this.subjectId = this.$route.query.id
-      }
     }
   }
 </script>
