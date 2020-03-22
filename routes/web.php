@@ -95,6 +95,23 @@ Route::group(['prefix'=>'/api/admin'], function () {
         Route::delete('/subjects', "SubjectController@delete")->name('subject.delete@删除专题');
         Route::delete('/subjects/{id}/articles', "SubjectController@del_article")->name('subject.add_article@删除专题文章');
 
+        Route::get('/pages', "PageController@table")->name('page.list');
+        Route::get('/pages/{id}', "PageController@info")->name('page.info');
+        Route::post('/pages', "PageController@save")->name('page.save@新增单页');
+        Route::put('/pages/{id}', "PageController@update")->name('page.update@修改单页');
+        Route::delete('/pages', "PageController@delete")->name('page.delete@删除单页');
+
+        Route::get('/notices', "NoticeController@table")->name('notice.list');
+        Route::get('/notices/{id}', "NoticeController@info")->name('notice.info');
+        Route::post('/notices', "NoticeController@save")->name('notice.save@新增公告消息');
+        Route::put('/notices/{id}', "NoticeController@update")->name('notice.update@修改公告消息');
+        Route::delete('/notices', "NoticeController@delete")->name('notice.delete@删除公告消息');
+
+        Route::get('/comments', "CommentController@table")->name('comment.list');
+        Route::get('/comments/{id}', "CommentController@info")->name('comment.info');
+//        Route::post('/comments', "CommentController@save")->name('comment.save@新增评论');
+//        Route::put('/comments/{id}', "CommentController@update")->name('comment.update@修改评论');
+        Route::delete('/comments', "CommentController@delete")->name('comment.delete@删除评论');
 
 
 
