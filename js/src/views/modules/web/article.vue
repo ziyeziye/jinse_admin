@@ -5,6 +5,14 @@
         <el-input clearable placeholder="标题" v-model="dataForm.name"></el-input>
       </el-form-item>
       <el-form-item>
+        <el-select placeholder="请选择类型" v-model="dataForm.type">
+          <el-option label="全部" value="0"></el-option>
+          <el-option label="文章" value="1"></el-option>
+          <el-option label="快讯" value="2"></el-option>
+          <el-option label="视频" value="3"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button @click="addOrUpdateHandle()" type="primary" v-if="isAuth('web:article:save')">新增</el-button>
         <el-button :disabled="dataListSelections.length <= 0" @click="deleteHandle()" type="danger"
@@ -81,7 +89,8 @@
     data() {
       return {
         dataForm: {
-          name: ''
+          name: '',
+          type: '0',
         },
         dataList: [],
         pageIndex: 1,
@@ -108,7 +117,8 @@
           params: this.$http.adornParams({
             'pageNum': this.pageIndex,
             'pageSize': this.pageSize,
-            'name': this.dataForm.name || null
+            'name': this.dataForm.name || null,
+            'type': this.dataForm.type || null
           })
         }).then(({data}) => {
           if (data && data.code === 200) {

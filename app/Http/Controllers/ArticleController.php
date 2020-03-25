@@ -19,6 +19,8 @@ class ArticleController extends BaseController
         //获取数据
         $page = $request->exists("pageNum") ? get_page() : [null];
         $where = request()->input();
+        $where['order_by'] = ["order" => "id", "desc" => "desc"];
+
         $result = $this->service()->table($where, ...$page);
         return $this->successWithResult($result);
     }

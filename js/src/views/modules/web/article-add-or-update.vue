@@ -211,6 +211,7 @@
     methods: {
       init(id) {
         this.dataForm.imgsrc = ''
+        this.defContent = ''
         this.headers = {
           'X-CSRF-TOKEN': this.$cookie.get('XSRF-TOKEN'),
           '_token': this.$cookie.get('token')
