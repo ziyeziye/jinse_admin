@@ -23,7 +23,7 @@
         align="center"
         header-align="center"
         type="selection"
-        width="28">
+        width="50">
       </el-table-column>
 
       <el-table-column

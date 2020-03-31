@@ -113,7 +113,11 @@ Route::group(['prefix'=>'/api/admin'], function () {
 //        Route::put('/comments/{id}', "CommentController@update")->name('comment.update@修改评论');
         Route::delete('/comments', "CommentController@delete")->name('comment.delete@删除评论');
 
-
+        Route::get('/feedbacks', "FeedbackController@table")->name('feedback.list');
+        Route::get('/feedbacks/{id}', "FeedbackController@info")->name('feedback.info');
+//        Route::post('/feedbacks', "FeedbackController@save")->name('feedback.save@新增反馈');
+//        Route::put('/feedbacks/{id}', "FeedbackController@update")->name('feedback.update@修改反馈');
+        Route::delete('/feedbacks', "FeedbackController@delete")->name('feedback.delete@删除反馈');
 
 
 

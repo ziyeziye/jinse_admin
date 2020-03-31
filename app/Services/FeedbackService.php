@@ -21,4 +21,15 @@ class FeedbackService extends BaseService
         return self::$_object;
     }
 
+    public static function table($param = [], int $page = null, int $size = 15)
+    {
+        $query = self::$model->query();
+        if (isset($param['type']) && !empty($param['type'])) {
+            $query = $query->where("type", $param['type']);
+        }
+        $query->with("user");
+
+        return self::ModelSearch($query, $param, $page, $size);
+    }
+
 }

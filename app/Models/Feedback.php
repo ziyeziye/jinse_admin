@@ -25,37 +25,42 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Feedback extends Model
 {
-	protected $table = 'feedbacks';
-	public $timestamps = false;
+    protected $table = 'feedbacks';
+    public $timestamps = false;
 
-	protected $casts = [
-		'user_id' => 'int',
-		'type' => 'string'
-	];
+    protected $casts = [
+        'user_id' => 'int',
+        'type' => 'string'
+    ];
 
     protected $appends = [
-        "type_name"
+        'type_name'
     ];
 
     public function getTypeNameAttribute()
     {
         $type = $this->type;
-        $types = ["默认","图片", "文章", "活动"];
-        return isset($types[$type]) ? $types[$type] : "";
+        $types = ['功能建议','体验建议', '内容建议', '其他'];
+        return $types[$type] ?? '其他';
     }
 
-	protected $dates = [
-		'create_time',
-		'update_time'
-	];
+    protected $dates = [
+        'create_time',
+        'update_time'
+    ];
 
-	protected $fillable = [
-		'user_id',
-		'type',
-		'content',
-		'nick_name',
-		'contact',
-		'create_time',
-		'update_time'
-	];
+    protected $fillable = [
+        'user_id',
+        'type',
+        'content',
+        'nick_name',
+        'contact',
+        'create_time',
+        'update_time'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id');
+    }
 }
