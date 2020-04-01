@@ -424,3 +424,19 @@ function isImage($mimeType)
 {
     return starts_with($mimeType, 'image/');
 }
+
+/**
+ * 判断是否是一个链接
+ * @param $url
+ * @return bool
+ */
+function isUrl($url)
+{
+    if (!empty($url)) {
+        $preg = "/^http(s)?:\\/\\/.+/";
+        if (preg_match($preg, $url)) {
+            return true;
+        }
+    }
+    return false;
+}
